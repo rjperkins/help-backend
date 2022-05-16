@@ -1,0 +1,6 @@
+{
+  "stage": "development",
+  "name": "help-app",
+  "region": "us-east-1",
+  "main": "stacks/index.ts"
+}

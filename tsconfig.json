@@ -1,0 +1,15 @@
+{
+  "extends": "@tsconfig/node14",
+  "include": ["stacks", "src"],
+  "compilerOptions": {
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "downlevelIteration": false,
+    "moduleResolution": "node",
+    "pretty": true,
+    "types": ["node"],
+    "useUnknownInCatchVariables": false
+  }
+}
