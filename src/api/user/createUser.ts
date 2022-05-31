@@ -3,12 +3,16 @@ import { CognitoIdentityServiceProvider } from 'aws-sdk';
 import Config from '../../lib/Config';
 import UserService from '../../dynamodb/user/Service';
 import { httpResponse } from '../../lib/utils/httpResponse';
+import debug from 'debug';
 
 const cognitoClient = new CognitoIdentityServiceProvider({
   region: 'us-east-1',
 });
 
+const debugVerbose = debug('api:verbose:create-user');
+
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
+  debugVerbose('event %j', event);
   const { body: rawBody } = event;
 
   try {
@@ -40,6 +44,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       })
       .promise();
 
+    let ddbRes;
     if (confirmRes instanceof Error) {
       await cognitoClient
         .adminDeleteUser({
@@ -47,8 +52,9 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
           Username: email,
         })
         .promise();
+      throw confirmRes;
     } else {
-      await UserService.createUser({
+      ddbRes = await UserService.createUser({
         id: res.UserSub,
         email,
         firstName,
@@ -60,7 +66,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     }
 
     return httpResponse(200, {
-      userSub: res.UserSub,
+      res,
     });
   } catch (error) {
     return httpResponse(500, {
