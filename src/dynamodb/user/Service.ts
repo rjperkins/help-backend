@@ -1,9 +1,10 @@
-import { DynamoDB } from 'aws-sdk';
-import Config from '../../lib/Config';
+import * as UserService from './Schema';
+import debug from 'debug';
 
-const ddb = new DynamoDB({ apiVersion: '2012-08-10', region: 'us-east-1' });
+const logTag = 'delete-user-service';
+const debugVerbose = debug(`ddb:user:verbose:${logTag}`);
 
-export default class UserService {
+export default class User {
   public static async createUser(input: {
     id: string;
     email: string;
@@ -12,73 +13,36 @@ export default class UserService {
     address: string;
     gender: string;
     birthdate: string;
-  }) {
+  }): Promise<UserService.User> {
     const { id, email, firstName, lastName, address, gender, birthdate } =
       input;
 
-    const ddbRes = await ddb
-      .putItem({
-        Item: {
-          userId: {
-            S: id,
-          },
-          email: {
-            S: email,
-          },
-          firstName: {
-            S: firstName,
-          },
-          lastName: {
-            S: lastName,
-          },
-          rating: {
-            N: '0',
-          },
-          helpsGiven: {
-            N: '0',
-          },
-          helpsReceived: {
-            N: '0',
-          },
-          gender: {
-            S: gender,
-          },
-          address: {
-            S: address,
-          },
-          birthdate: {
-            S: birthdate,
-          },
-        },
-        ReturnValues: 'ALL_OLD',
-        TableName: Config.userTableName,
-      })
-      .promise();
+    const output = await UserService.UserModel.create({
+      userId: id,
+      email,
+      firstName,
+      lastName,
+      address,
+      gender,
+      birthdate,
+      rating: 0,
+      helpsGiven: 0,
+      helpsReceived: 0,
+    });
+
+    debugVerbose('output', output);
+    return output;
   }
 
   public static async getUsers() {
-    return await ddb
-      .scan({
-        TableName: Config.userTableName,
-      })
-      .promise();
+    return await UserService.UserModel.scan().exec();
   }
 
   public static async getUserById(id: string) {
-    return await ddb
-      .getItem({
-        Key: { userId: { S: id } },
-        TableName: Config.userTableName,
-      })
-      .promise();
+    return await UserService.UserModel.query('userId').eq(id).exec();
   }
 
-  public static async deleteUser(input: { email: string }) {
-    return await ddb
-      .deleteItem({
-        Key: { email: { S: input.email } },
-        TableName: Config.userTableName,
-      })
-      .promise();
+  public static async deleteUser(id: string) {
+    return await UserService.UserModel.delete(id);
   }
 }

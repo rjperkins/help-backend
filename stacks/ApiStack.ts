@@ -40,13 +40,15 @@ export default class ApiStack extends sst.Stack {
         'POST /sign-in': 'src/api/auth/signIn.handler',
         'POST /sign-out': 'src/api/auth/signOut.handler',
         // User endpoints.
-        // 'GET /users': 'src/api/user/getUsers.handler',
-        // 'GET /users/{id}': 'src/api/user/getUserById.handler',
+        'GET /users': 'src/api/user/getUsers.handler',
+        'GET /users/{id}': 'src/api/user/getUserById.handler',
         'POST /users': 'src/api/user/createUser.handler',
-        // 'DELETE /users/{id}': 'src/api/user/deleteUser.handler',
+        'DELETE /users/{id}': 'src/api/user/deleteUser.handler',
         // Request endpoints.
         // 'GET /requests': 'src/api/requests/getRequests.handler',
         // 'GET /requests/{id}': 'src/api/requests/getRequestById.handler',
+        // 'POST /requests/{id}': 'src/api/requests/acceptRequest.handler',
+        // 'POST /accept-request/{id}': 'src/api/requests/createRequest.handler',
         // 'POST /requests': 'src/api/requests/createRequest.handler',
         // 'DELETE /requests/{id}': 'src/api/requests/deleteRequest.handler',
       },

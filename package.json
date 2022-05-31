@@ -5,12 +5,12 @@
   "scripts": {
     "test": "AWS_PROFILE=help-app-154562047227 && sst test",
     "prestart": "AWS_PROFILE=help-app-154562047227 && sst build --stage debug",
-    "start": "npm run build && AWS_PROFILE=help-app-154562047227 && sst start --stage debug",
+    "start": "export AWS_PROFILE=help-app-154562047227 && sst start --stage debug",
     "console": "open console.serverless-stack.com",
-    "build": "AWS_PROFILE=help-app-154562047227 && sst build --stage $STAGE",
+    "build": "set -u && : '$BATCHNUM' && AWS_PROFILE=help-app-154562047227 && sst build --stage $STAGE",
     "deploy:dev": "AWS_PROFILE=help-app-154562047227 && sst deploy --stage development",
     "deploy:prod": "AWS_PROFILE=help-app-154562047227 && sst deploy --stage production",
-    "remove": "AWS_PROFILE=help-app-154562047227 && sst remove --stage $STAGE"
+    "remove": "set -u && : '$BATCHNUM' && AWS_PROFILE=help-app-154562047227 && sst remove --stage $STAGE"
   },
   "eslintConfig": {
     "extends": [
@@ -22,14 +22,19 @@
     "@serverless-stack/resources": "1.0.11",
     "@tsconfig/node14": "^1.0.1",
     "@types/aws-lambda": "^8.10.70",
+    "@types/debug": "^4.1.7",
     "@types/jest": "^27.5.1",
     "@types/node": "^14.18.18",
     "aws-cdk-lib": "2.22.0",
+    "jest": "^28.1.0",
+    "ts-jest": "^28.0.2",
     "typescript": "4.4.4"
   },
   "dependencies": {
     "@aws-cdk/aws-apigatewayv2-alpha": "2.22.0-alpha.0",
     "aws-sdk": "^2.1134.0",
+    "debug": "^4.3.4",
+    "dynamoose": "^2.8.5",
     "next": "12.1.5"
   }
 }
