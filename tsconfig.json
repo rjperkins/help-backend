@@ -7,9 +7,10 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "downlevelIteration": false,
+    "esModuleInterop": true,
     "moduleResolution": "node",
     "pretty": true,
-    "types": ["node"],
+    "types": ["node", "jest"],
     "useUnknownInCatchVariables": false
   }
 }
