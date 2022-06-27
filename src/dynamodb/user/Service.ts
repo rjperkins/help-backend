@@ -1,8 +1,4 @@
-import * as UserService from './Schema';
-import debug from 'debug';
-
-const logTag = 'delete-user-service';
-const debugVerbose = debug(`ddb:user:verbose:${logTag}`);
+import { UserModel } from './Schema';
 
 export default class User {
   public static async createUser(input: {
@@ -13,11 +9,11 @@ export default class User {
     address: string;
     gender: string;
     birthdate: string;
-  }): Promise<UserService.User> {
+  }): Promise<User> {
     const { id, email, firstName, lastName, address, gender, birthdate } =
       input;
 
-    const output = await UserService.UserModel.create({
+    const output = await UserModel.create({
       userId: id,
       email,
       firstName,
@@ -30,19 +26,36 @@ export default class User {
       helpsReceived: 0,
     });
 
-    debugVerbose('output', output);
     return output;
   }
 
   public static async getUsers() {
-    return await UserService.UserModel.scan().exec();
+    return await UserModel.scan().exec();
   }
 
   public static async getUserById(id: string) {
-    return await UserService.UserModel.query('userId').eq(id).exec();
+    return await UserModel.query('userId').eq(id).exec();
   }
 
   public static async deleteUser(id: string) {
-    return await UserService.UserModel.delete(id);
+    return await UserModel.delete(id);
+  }
+
+  public static async updateUserById(
+    id: string,
+    input: {
+      email?: string;
+      firstName?: string;
+      lastName?: string;
+      address?: string;
+      gender?: string;
+      birthdate?: string;
+      rating?: number;
+      helpsGiven?: number;
+      helpsReceived?: number;
+    }
+  ) {
+    const output = await UserModel.update(id, input);
+    return output;
   }
 }

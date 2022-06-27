@@ -1,6 +1,7 @@
+// @ts-nocheck
 import * as dynamoose from 'dynamoose';
 import { Document } from 'dynamoose/dist/Document';
-
+import Config from '../../lib/Config';
 // Code.
 const schema = new dynamoose.Schema(
   {
@@ -60,7 +61,7 @@ export class User extends Document {
 }
 
 export const UserModel = dynamoose.model<User>(
-  `debug-help-app-bunch-o-cunts`,
+  `${Config.stage}-help-app-user-table`,
   schema,
   {
     create: false,
