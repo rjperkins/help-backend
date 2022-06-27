@@ -24,15 +24,22 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     });
   }
 
-  const { body: rawBody } = event;
-  const body = JSON.parse(rawBody as string);
-
   try {
-    const ddbRes = await RequestService.updateRequestById(id, body);
+    const ddbRes = await RequestService.getRequestById(id);
+    const request = ddbRes[0];
+
+    if (!request) {
+      throw new Error('Request does not exist.');
+    }
+
+    const { body: rawBody } = event;
+    const body = JSON.parse(rawBody as string);
+
+    await RequestService.updateRequestById(id, body);
 
     return httpResponse(200, {
       service: logTag,
-      body: ddbRes,
+      body: 'Request updated correctly',
     });
   } catch (error) {
     return httpResponse(500, {
