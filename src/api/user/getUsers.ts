@@ -8,11 +8,18 @@ const debugVerbose = debug(`api:verbose:${logTag}`);
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   debugVerbose('event %j', event);
-  const output = await UserService.getUsers();
-  debugVerbose('output %j', output);
+  try {
+    const output = await UserService.getUsers();
+    debugVerbose('output %j', output);
 
-  return httpResponse(200, {
-    service: logTag,
-    body: output,
-  });
+    return httpResponse(200, {
+      service: logTag,
+      body: output,
+    });
+  } catch (error) {
+    return httpResponse(500, {
+      service: logTag,
+      error: error.message,
+    });
+  }
 };

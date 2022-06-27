@@ -25,8 +25,13 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     }
 
     const output = await UserService.getUserById(id);
+    const user = output[0];
 
-    debugVerbose('output %j', output);
+    if (!user) {
+      throw new Error('User does not exist.');
+    }
+
+    debugVerbose('output %j', user);
 
     return httpResponse(200, {
       service: logTag,
