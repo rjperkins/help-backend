@@ -1,10 +1,8 @@
-import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
-
 // Code.
 export enum Stage {
   Production = 'production',
-  Staging = 'staging',
-  Test = 'test',
+  Development = 'development',
+  Debug = 'debug',
 }
 
 export default class Config {
@@ -13,7 +11,7 @@ export default class Config {
   }
 
   public static get stage(): Stage {
-    return (process.env.STAGE as Stage) || Stage.Test;
+    return (process.env.STAGE as Stage) || Stage.Debug;
   }
 
   public static get region(): string {
