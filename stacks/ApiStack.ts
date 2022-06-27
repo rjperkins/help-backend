@@ -44,13 +44,15 @@ export default class ApiStack extends sst.Stack {
         'GET /users/{id}': 'src/api/user/getUserById.handler',
         'POST /users': 'src/api/user/createUser.handler',
         'DELETE /users/{id}': 'src/api/user/deleteUser.handler',
+        'PUT /users/{id}': 'src/api/user/updateUser.handler',
         // Request endpoints.
-        // 'GET /requests': 'src/api/requests/getRequests.handler',
-        // 'GET /requests/{id}': 'src/api/requests/getRequestById.handler',
-        // 'POST /requests/{id}': 'src/api/requests/acceptRequest.handler',
-        // 'POST /accept-request/{id}': 'src/api/requests/createRequest.handler',
-        // 'POST /requests': 'src/api/requests/createRequest.handler',
-        // 'DELETE /requests/{id}': 'src/api/requests/deleteRequest.handler',
+        'GET /requests': 'src/api/requests/getRequests.handler',
+        'GET /requests/{id}': 'src/api/requests/getRequestById.handler',
+        'GET /user-requests/{userId}':
+          'src/api/requests/getRequestsByUserId.handler',
+        'POST /requests': 'src/api/requests/createRequest.handler',
+        'DELETE /requests/{id}': 'src/api/requests/deleteRequest.handler',
+        'PUT /requests/{id}': 'src/api/requests/updateRequest.handler',
       },
     });
 
