@@ -54,6 +54,7 @@ export default class Request {
       category?: string;
       location?: string;
       photoS3Url?: string;
+      completed?: boolean;
     }
   ): Promise<Request> {
     const output = await RequestModel.update(requestId, input);

@@ -35,6 +35,10 @@ const schema = new dynamoose.Schema(
     photoS3Url: {
       type: Number,
     },
+    completed: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
