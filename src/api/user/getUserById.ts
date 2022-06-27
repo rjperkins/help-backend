@@ -3,7 +3,8 @@ import UserService from '../../dynamodb/user/Service';
 import { httpResponse } from '../../lib/utils/httpResponse';
 import debug from 'debug';
 
-const debugVerbose = debug('api:verbose:user-by-id');
+const logTag = 'get-user-by-id-handler';
+const debugVerbose = debug(`api:verbose:${logTag}`);
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   debugVerbose('event %j', event);
@@ -24,15 +25,16 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     }
 
     const output = await UserService.getUserById(id);
-    console.log('outputsd', output);
 
     debugVerbose('output %j', output);
 
     return httpResponse(200, {
-      output,
+      service: logTag,
+      body: output,
     });
   } catch (error) {
     return httpResponse(500, {
+      service: logTag,
       error: error.message,
     });
   }

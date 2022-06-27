@@ -9,7 +9,8 @@ const cognitoClient = new CognitoIdentityServiceProvider({
   region: 'us-east-1',
 });
 
-const debugVerbose = debug('api:verbose:create-user');
+const logTag = 'create-user-handler';
+const debugVerbose = debug(`api:verbose:${logTag}`);
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   debugVerbose('event %j', event);
@@ -66,7 +67,8 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     }
 
     return httpResponse(200, {
-      res,
+      service: logTag,
+      body: { cognitoRes: res, ddbRes },
     });
   } catch (error) {
     return httpResponse(500, {

@@ -8,6 +8,7 @@ import debug from 'debug';
 const cognitoClient = new CognitoIdentityServiceProvider({
   region: 'us-east-1',
 });
+
 const logTag = 'delete-user-handler';
 const debugVerbose = debug(`api:verbose:${logTag}`);
 
@@ -27,7 +28,6 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
         error: new Error('Must include id in path parameters.').message,
       });
     }
-    debugVerbose('id', id);
 
     const ddbRes = await UserService.getUserById(id);
     const user = ddbRes[0];
