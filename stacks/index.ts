@@ -1,6 +1,7 @@
 import ApiStack from './ApiStack';
 import DDBStack from './DDBStack';
 import CognitoStack from './CognitoStack';
+// import WebSocketStack from './WebSocketStack';
 import Config from './lib/Config';
 import * as sst from '@serverless-stack/resources';
 
@@ -29,4 +30,10 @@ export default function main(app: sst.App): void {
     cognitoUserPoolId: cognitoStack.userPoolId,
     stage: Config.stage,
   });
+  // new WebSocketStack(app, `websocket-stack`, {
+  //   userTableName: ddbStack.userTableName,
+  //   requestTableName: ddbStack.requestTableName,
+  //   cognitoUserPoolId: cognitoStack.userPoolId,
+  //   cognitoUserPoolClientId: cognitoStack.userPoolClientId,
+  // });
 }

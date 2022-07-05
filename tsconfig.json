@@ -1,6 +1,6 @@
 {
   "extends": "@tsconfig/node14",
-  "include": ["stacks", "src"],
+  "include": ["stacks", "src", "test"],
   "compilerOptions": {
     "noUnusedLocals": true,
     "noUnusedParameters": true,
