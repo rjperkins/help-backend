@@ -25,6 +25,10 @@ const schema = new dynamoose.Schema(
     description: {
       type: String,
     },
+    give: {
+      type: Boolean,
+      required: true,
+    },
     category: {
       type: String,
       required: true,
@@ -33,7 +37,7 @@ const schema = new dynamoose.Schema(
       type: String,
     },
     photoS3Url: {
-      type: Number,
+      type: String,
     },
     completed: {
       type: Boolean,
@@ -51,13 +55,15 @@ export class Request extends Document {
   acceptedUserId: string;
   request: string;
   description: string;
+  give: boolean;
   category: string;
   location: string;
   photoS3Url: string;
+  completed: boolean;
 }
 
 export const RequestModel = dynamoose.model<Request>(
-  `${Config.stage}-help-app-request-table`,
+  `${Config.stage}-help-app-requests-table`,
   schema,
   {
     create: false,

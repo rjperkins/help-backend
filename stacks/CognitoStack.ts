@@ -10,8 +10,6 @@ export default class CognitoStack extends sst.Stack {
   constructor(scope: sst.App, id: string, props: CognitoStackProps) {
     super(scope, id, props);
 
-    const {} = props;
-
     const userPool = new sst.Auth(this, `user-pool`, {
       // triggers: {
       //   postAuthentication: {

@@ -1,23 +1,32 @@
 import { v4 as uuid } from 'uuid';
-import { RequestModel } from './Schema';
+import { Request, RequestModel } from './Schema';
 
-export default class Request {
+export default class RequestService {
   public static async createRequest(input: {
     userId: string;
     request: string;
     description: string;
+    give: boolean;
     category: string;
     location: string;
     photoS3Url: string;
   }): Promise<Request> {
-    const { userId, request, description, category, location, photoS3Url } =
-      input;
+    const {
+      userId,
+      request,
+      give,
+      description,
+      category,
+      location,
+      photoS3Url,
+    } = input;
 
     const output = await RequestModel.create({
       requestId: uuid(),
       userId,
       request,
       description,
+      give,
       category,
       location,
       photoS3Url,

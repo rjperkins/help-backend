@@ -14,7 +14,7 @@ export default class DDBStack extends sst.Stack {
     const {} = props;
 
     // Create dynamoDB tables
-    const requestTable = new sst.Table(this, `request`, {
+    const requestTable = new sst.Table(this, `request-table`, {
       fields: {
         requestId: 'string',
         userId: 'string',

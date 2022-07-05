@@ -1,6 +1,6 @@
-import { UserModel } from './Schema';
+import { User, UserModel } from './Schema';
 
-export default class User {
+export default class UserService {
   public static async createUser(input: {
     id: string;
     email: string;
