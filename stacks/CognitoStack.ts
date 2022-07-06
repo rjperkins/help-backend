@@ -1,5 +1,4 @@
 import * as sst from '@serverless-stack/resources';
-// import * as path from 'path';
 
 interface CognitoStackProps extends sst.StackProps {}
 
@@ -11,10 +10,9 @@ export default class CognitoStack extends sst.Stack {
     super(scope, id, props);
 
     const userPool = new sst.Auth(this, `user-pool`, {
-      // triggers: {
-      //   postAuthentication: {
-      //     handler: path.join(''),
-      //   },
+      // identityPoolFederation: {
+      //   google: { clientId: '' },
+      //   facebook: { appId: '' },
       // },
     });
 

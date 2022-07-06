@@ -5,6 +5,7 @@ interface ApiStackProps extends sst.StackProps {
   requestTableName: string;
   cognitoUserPoolId: string;
   cognitoUserPoolClientId: string;
+  stage: string;
 }
 
 export default class ApiStack extends sst.Stack {
@@ -16,6 +17,7 @@ export default class ApiStack extends sst.Stack {
       requestTableName,
       cognitoUserPoolId,
       cognitoUserPoolClientId,
+      stage,
     } = props;
 
     const api = new sst.Api(this, `api`, {
@@ -26,6 +28,7 @@ export default class ApiStack extends sst.Stack {
             REQUEST_TABLE_NAME: requestTableName || '',
             COGNITO_USER_POOL_ID: cognitoUserPoolId || '',
             COGNITO_USER_POOL_CLIENT_ID: cognitoUserPoolClientId || '',
+            STAGE: stage,
           },
           permissions: ['cognito-idp:*', 'dynamodb:*'],
         },

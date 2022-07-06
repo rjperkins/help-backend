@@ -5,6 +5,7 @@ import debug from 'debug';
 
 const logTag = 'delete-request-handler';
 const debugVerbose = debug('api:verbose:delete-request');
+const debugError = debug(`api:error:${logTag}`);
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   debugVerbose('event %j', event);
@@ -38,6 +39,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       body: 'Request deleted correctly',
     });
   } catch (error) {
+    debugError('error', error);
     return httpResponse(500, {
       service: logTag,
       error: error.message,

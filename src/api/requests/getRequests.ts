@@ -7,6 +7,7 @@ import debug from 'debug';
 // Code.
 const logTag = 'get-requests-handler';
 const debugVerbose = debug(`api:verbose:${logTag}`);
+const debugError = debug(`api:error:${logTag}`);
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   debugVerbose('event %j', event);
@@ -18,6 +19,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       body: ddbRes,
     });
   } catch (error) {
+    debugError('error', error);
     return httpResponse(500, {
       service: logTag,
       error: error.message,

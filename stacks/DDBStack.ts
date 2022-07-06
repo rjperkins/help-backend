@@ -14,7 +14,7 @@ export default class DDBStack extends sst.Stack {
     const {} = props;
 
     // Create dynamoDB tables
-    const requestTable = new sst.Table(this, `request-table`, {
+    const requestTable = new sst.Table(this, `requests-table`, {
       fields: {
         requestId: 'string',
         userId: 'string',
@@ -29,6 +29,9 @@ export default class DDBStack extends sst.Stack {
       globalIndexes: {
         gs1: {
           partitionKey: 'acceptedUserId',
+        },
+        gs2: {
+          partitionKey: 'userId',
         },
       },
     });
@@ -50,6 +53,11 @@ export default class DDBStack extends sst.Stack {
         birthdate: 'string',
       },
       primaryIndex: { partitionKey: 'userId' },
+      globalIndexes: {
+        gs1: {
+          partitionKey: 'email',
+        },
+      },
     });
 
     this.userTableName = userTable.tableName;

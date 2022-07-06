@@ -16,7 +16,7 @@ export default function main(app: sst.App): void {
 
   console.warn(`
     *****************************
-    STAGE IS ${process.env.STAGE}
+    STAGE IS ${Config.stage}
     *****************************
   `);
 
@@ -27,5 +27,6 @@ export default function main(app: sst.App): void {
     requestTableName: ddbStack.requestTableName,
     cognitoUserPoolClientId: cognitoStack.userPoolClientId,
     cognitoUserPoolId: cognitoStack.userPoolId,
+    stage: Config.stage,
   });
 }

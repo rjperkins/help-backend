@@ -2,12 +2,18 @@ import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import { CognitoIdentityServiceProvider } from 'aws-sdk';
 import Config from '../../lib/Config';
 import { httpResponse } from '../../lib/utils/httpResponse';
+import debug from 'debug';
+
+const logTag = 'create-request-handler';
+const debugVerbose = debug(`api:verbose:${logTag}`);
+const debugError = debug(`api:error:${logTag}`);
 
 const cognitoClient = new CognitoIdentityServiceProvider({
   region: 'us-east-1',
 });
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
+  debugVerbose('event %j', event);
   const { body: rawBody } = event;
 
   try {
@@ -17,7 +23,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
     const res = await cognitoClient
       .adminInitiateAuth({
-        AuthFlow: 'ADMIN_USER_PASSWORD_AUTH',
+        AuthFlow: 'ADMIN_NO_SRP_AUTH',
         AuthParameters: {
           USERNAME: email,
           PASSWORD: password,
@@ -33,6 +39,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       refreshToken: res.AuthenticationResult?.RefreshToken,
     });
   } catch (error) {
+    debugError('error', error);
     return httpResponse(500, {
       error: error.message,
     });

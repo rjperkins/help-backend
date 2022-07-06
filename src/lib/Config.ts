@@ -11,7 +11,7 @@ export default class Config {
   }
 
   public static get stage(): Stage {
-    return (process.env.STAGE as Stage) || Stage.Debug;
+    return (process.env.STAGE as Stage) || Stage.Development;
   }
 
   public static get region(): string {

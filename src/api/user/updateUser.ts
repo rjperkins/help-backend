@@ -5,6 +5,7 @@ import debug from 'debug';
 
 const logTag = 'update-user-handler';
 const debugVerbose = debug(`api:verbose:${logTag}`);
+const debugError = debug(`api:error:${logTag}`);
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   debugVerbose('event %j', event);
@@ -35,13 +36,14 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     const { body: rawBody } = event;
     const body = JSON.parse(rawBody as string);
 
-    await UserService.updateUserById(id, body);
+    const updatedUser = await UserService.updateUserById(id, body);
 
     return httpResponse(200, {
       service: logTag,
-      body: 'User updated correctly',
+      body: updatedUser,
     });
   } catch (error) {
+    debugError('error', error);
     return httpResponse(500, {
       service: logTag,
       error: error.message,

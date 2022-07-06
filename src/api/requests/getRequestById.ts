@@ -4,8 +4,9 @@ import RequestService from '../../dynamodb/requests/Service';
 import { httpResponse } from '../../lib/utils/httpResponse';
 import debug from 'debug';
 
-const logTag = 'get-request-handler';
+const logTag = 'get-request-by-id-handler';
 const debugVerbose = debug(`api:verbose:${logTag}`);
+const debugError = debug(`api:error:${logTag}`);
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   debugVerbose('event %j', event);
@@ -42,6 +43,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       body: request,
     });
   } catch (error) {
+    debugError('error', error);
     return httpResponse(500, {
       service: logTag,
       error: error.message,

@@ -5,10 +5,10 @@
   "scripts": {
     "test": "AWS_PROFILE=help-app-154562047227 && sst test",
     "prestart": "AWS_PROFILE=help-app-154562047227 && sst build --stage debug",
-    "start": "export AWS_PROFILE=help-app-154562047227 && sst start --stage debug",
+    "start": "export STAGE=debug && export AWS_PROFILE=help-app-154562047227 && sst start --stage debug",
     "console": "open console.serverless-stack.com",
     "build": "set -u && : '$BATCHNUM' && AWS_PROFILE=help-app-154562047227 && sst build --stage $STAGE",
-    "deploy:dev": "AWS_PROFILE=help-app-154562047227 && sst deploy --stage development",
+    "deploy:dev": "AWS_PROFILE=help-app-154562047227 STAGE=development && sst deploy --stage development",
     "deploy:prod": "AWS_PROFILE=help-app-154562047227 && sst deploy --stage production",
     "remove": "set -u && : '$BATCHNUM' && AWS_PROFILE=help-app-154562047227 && sst remove --stage $STAGE"
   },
