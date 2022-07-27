@@ -14,9 +14,17 @@ const schema = new dynamoose.Schema(
     userId: {
       type: String,
       required: true,
+      index: {
+        global: true,
+        name: 'gs2',
+      },
     },
     acceptedUserId: {
       type: String,
+      index: {
+        global: true,
+        name: 'gs1',
+      },
     },
     request: {
       type: String,

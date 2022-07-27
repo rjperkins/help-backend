@@ -8,7 +8,7 @@ const debugVerbose = debug(`api:verbose:${logTag}`);
 const debugError = debug(`api:error:${logTag}`);
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
-  debugVerbose('event %j', event);
+  debugVerbose('event', event);
   const { body: rawBody } = event;
 
   const body = JSON.parse(rawBody as string);
@@ -16,10 +16,13 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   try {
     const ddbRes = await RequestService.createRequest(body);
 
-    return httpResponse(200, {
+    const output = {
       service: logTag,
       body: ddbRes,
-    });
+    };
+    debugVerbose('output', output);
+
+    return httpResponse(200, output);
   } catch (error) {
     debugError('error', error);
     return httpResponse(500, {

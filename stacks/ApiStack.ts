@@ -29,6 +29,7 @@ export default class ApiStack extends sst.Stack {
             COGNITO_USER_POOL_ID: cognitoUserPoolId || '',
             COGNITO_USER_POOL_CLIENT_ID: cognitoUserPoolClientId || '',
             STAGE: stage,
+            DEBUG: process.env.DEBUG || '*',
           },
           permissions: ['cognito-idp:*', 'dynamodb:*'],
         },

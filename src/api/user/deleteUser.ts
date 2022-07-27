@@ -14,7 +14,7 @@ const debugVerbose = debug(`api:verbose:${logTag}`);
 const debugError = debug(`api:error:${logTag}`);
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
-  debugVerbose('event %j', event);
+  debugVerbose('event', event);
 
   try {
     if (!event.pathParameters) {
@@ -50,10 +50,13 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
     await UserService.deleteUser(id);
 
-    return httpResponse(200, {
+    const output = {
       service: logTag,
       body: 'User deleted correctly',
-    });
+    };
+    debugVerbose('output', output);
+
+    return httpResponse(200, output);
   } catch (error) {
     debugError('error', error);
     return httpResponse(500, {

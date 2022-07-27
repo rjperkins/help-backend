@@ -1,5 +1,6 @@
 import { v4 as uuid } from 'uuid';
 import { Request, RequestModel } from './Schema';
+import * as dynamoose from 'dynamoose';
 
 export default class RequestService {
   public static async createRequest(input: {
@@ -41,6 +42,8 @@ export default class RequestService {
   }
 
   public static async getRequestsByUserId(userId: string) {
+    // const condition = new dynamoose.Condition().where('userId').eq(userId);
+
     const output = await RequestModel.query('userId').eq(userId).exec();
     return output;
   }

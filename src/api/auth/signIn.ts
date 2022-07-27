@@ -13,7 +13,7 @@ const cognitoClient = new CognitoIdentityServiceProvider({
 });
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
-  debugVerbose('event %j', event);
+  debugVerbose('event', event);
   const { body: rawBody } = event;
 
   try {

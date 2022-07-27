@@ -8,7 +8,7 @@ const debugVerbose = debug(`api:verbose:${logTag}`);
 const debugError = debug(`api:error:${logTag}`);
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
-  debugVerbose('event %j', event);
+  debugVerbose('event', event);
 
   try {
     if (!event.pathParameters) {
@@ -25,19 +25,20 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       });
     }
 
-    const output = await UserService.getUserById(id);
-    const user = output[0];
+    const ddbRes = await UserService.getUserById(id);
+    const user = ddbRes[0];
 
     if (!user) {
       throw new Error('User does not exist.');
     }
 
-    debugVerbose('output %j', user);
-
-    return httpResponse(200, {
+    const output = {
       service: logTag,
-      body: output,
-    });
+      body: user,
+    };
+    debugVerbose('output', output);
+
+    return httpResponse(200, output);
   } catch (error) {
     debugError('error', error);
     return httpResponse(500, {
