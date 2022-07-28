@@ -1,5 +1,5 @@
 import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
-import { httpResponse } from '../../lib/utils/httpResponse';
+import { HttpResponse, httpResponse } from '../../lib/utils/httpResponse';
 import RequestService from '../../dynamodb/requests/Service';
 import debug from 'debug';
 
@@ -7,7 +7,9 @@ const logTag = 'create-request-handler';
 const debugVerbose = debug(`api:verbose:${logTag}`);
 const debugError = debug(`api:error:${logTag}`);
 
-export const handler: APIGatewayProxyHandlerV2 = async (event) => {
+export const handler: APIGatewayProxyHandlerV2 = async (
+  event
+): Promise<HttpResponse> => {
   debugVerbose('event', event);
   const { body: rawBody } = event;
 

@@ -2,7 +2,7 @@ import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import { CognitoIdentityServiceProvider } from 'aws-sdk';
 import Config from '../../lib/Config';
 import UserService from '../../dynamodb/user/Service';
-import { httpResponse } from '../../lib/utils/httpResponse';
+import { HttpResponse, httpResponse } from '../../lib/utils/httpResponse';
 import debug from 'debug';
 
 const cognitoClient = new CognitoIdentityServiceProvider({
@@ -13,7 +13,9 @@ const logTag = 'create-user-handler';
 const debugVerbose = debug(`api:verbose:${logTag}`);
 const debugError = debug(`api:error:${logTag}`);
 
-export const handler: APIGatewayProxyHandlerV2 = async (event) => {
+export const handler: APIGatewayProxyHandlerV2 = async (
+  event
+): Promise<HttpResponse> => {
   debugVerbose('event', event);
   const { body: rawBody } = event;
 

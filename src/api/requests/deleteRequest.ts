@@ -1,5 +1,5 @@
 import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
-import { httpResponse } from '../../lib/utils/httpResponse';
+import { HttpResponse, httpResponse } from '../../lib/utils/httpResponse';
 import RequestService from '../../dynamodb/requests/Service';
 import debug from 'debug';
 
@@ -7,11 +7,14 @@ const logTag = 'delete-request-handler';
 const debugVerbose = debug('api:verbose:delete-request');
 const debugError = debug(`api:error:${logTag}`);
 
-export const handler: APIGatewayProxyHandlerV2 = async (event) => {
+export const handler: APIGatewayProxyHandlerV2 = async (
+  event
+): Promise<HttpResponse> => {
   debugVerbose('event', event);
   try {
     if (!event.pathParameters) {
       return httpResponse(500, {
+        service: logTag,
         error: new Error('Must include path parameters.').message,
       });
     }
@@ -21,6 +24,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
     if (!id) {
       return httpResponse(500, {
+        service: logTag,
         error: new Error('Must include id in path parameters.').message,
       });
     }
