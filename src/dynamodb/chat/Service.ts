@@ -6,7 +6,7 @@ export interface Message {
 }
 
 export class ChatService {
-  public static async createChat(input: {
+  public static createChat(input: {
     chatId: string;
     userId1: string;
     userId2: string;
@@ -21,11 +21,11 @@ export class ChatService {
     });
   }
 
-  public static async getChat(chatId: string) {
-    return await ChatModel.query('id').eq(chatId).exec();
+  public static getChat(chatId: string) {
+    return ChatModel.query('id').eq(chatId).exec();
   }
 
-  public static async updateChatById(
+  public static updateChatById(
     id: string,
     input: {
       messages: string;
@@ -34,7 +34,7 @@ export class ChatService {
     return ChatModel.update(id, input);
   }
 
-  public static async deleteChat(id: string) {
-    return await ChatModel.delete(id);
+  public static deleteChat(id: string) {
+    return ChatModel.delete(id);
   }
 }

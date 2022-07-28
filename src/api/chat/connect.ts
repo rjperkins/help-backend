@@ -1,14 +1,14 @@
 import ConnectionService from '../../dynamodb/connections/Service';
 import { ChatService, Chat } from '../../dynamodb/chat';
 import debug from 'debug';
-import { httpResponse, base64Ids } from '../../lib/utils';
+import { httpResponse, base64Ids, HttpResponse } from '../../lib/utils';
 import { QueryResponse } from 'dynamoose/dist/DocumentRetriever';
 
 const logTag = 'connect-handler';
 const debugVerbose = debug(`ws-api:verbose:${logTag}`);
 const debugError = debug(`ws-api:error:${logTag}`);
 
-export const main = async (event: any) => {
+export const main = async (event: any): Promise<HttpResponse> => {
   // debugVerbose('event', event);
 
   let chat: Chat = { messages: [] } as unknown as Chat;
@@ -40,7 +40,13 @@ export const main = async (event: any) => {
       chat = entry[0];
     }
 
-    debugVerbose('chat', chat);
+    const output = {
+      service: logTag,
+      body: chat.messages,
+    };
+    debugVerbose('output', output);
+
+    return httpResponse(200, output);
   } catch (e) {
     debugError('error %s', e.message);
     return httpResponse(500, {
@@ -48,8 +54,4 @@ export const main = async (event: any) => {
       error: e.message,
     });
   }
-  return httpResponse(200, {
-    service: logTag,
-    body: chat.messages,
-  });
 };
