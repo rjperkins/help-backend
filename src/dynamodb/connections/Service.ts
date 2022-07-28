@@ -9,20 +9,20 @@ export interface Message {
 export default class ConnectionService {
   public static async createConnection(input: {
     connectionId: string;
+    chatId: string;
   }): Promise<Connection> {
-    const { connectionId } = input;
+    return await ConnectionModel.create(input);
+  }
 
-    return await ConnectionModel.create({
-      connectionId,
-    });
+  public static async getConnectionByChatId(chatId: string) {
+    return await ConnectionModel.query('chatId').eq(chatId).exec();
   }
 
   public static async getConnections() {
     return await ConnectionModel.scan().exec();
   }
 
-  public static async deleteConnection(input: { connectionId: string }) {
-    const { connectionId } = input;
+  public static async deleteConnection(connectionId: string) {
     return await ConnectionModel.delete(connectionId);
   }
 }

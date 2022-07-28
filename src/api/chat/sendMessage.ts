@@ -2,22 +2,23 @@ import ConnectionService from '../../dynamodb/connections/Service';
 import debug from 'debug';
 import AWS from 'aws-sdk';
 import { httpResponse } from '../../lib/utils/httpResponse';
+import { base64Ids } from '../../lib/utils';
 
 const logTag = 'send-message-handler';
 const debugVerbose = debug(`ws-api:verbose:${logTag}`);
 const debugError = debug(`ws-api:error:${logTag}`);
 
-export const handler = async (event: any) => {
-  debugVerbose('event %j', event);
+export const main = async (event: any) => {
+  debugVerbose('event', event);
 
   let connections;
   try {
     connections = await ConnectionService.getConnections();
   } catch (err) {
-    return {
-      statusCode: 500,
+    return httpResponse(500, {
+      service: logTag,
       error: err.message,
-    };
+    });
   }
   const callbackAPI = new AWS.ApiGatewayManagementApi({
     apiVersion: '2018-11-29',
@@ -25,14 +26,28 @@ export const handler = async (event: any) => {
       event.requestContext.domainName + '/' + event.requestContext.stage,
   });
 
-  const message = JSON.parse(event.body).message;
-  debugVerbose('message %s', message);
+  const body = JSON.parse(event.body);
 
-  const sendMessages = connections.map(async ({ connectionId }) => {
-    if (connectionId === event.requestContext.connectionId) {
+  const { message, userId1, userId2 } = body;
+
+  const chatId = base64Ids(userId1, userId2);
+  debugVerbose('message', message);
+  debugVerbose('connections', connections);
+  debugVerbose('chatId', chatId);
+
+  const sendMessages = connections.map(async (connection) => {
+    if (
+      connection.chatId === chatId &&
+      connection.connectionId !== event.requestContext.connectionId
+    ) {
+      console.log(12345);
+
       try {
         await callbackAPI
-          .postToConnection({ ConnectionId: connectionId, Data: message })
+          .postToConnection({
+            ConnectionId: event.requestContext.connectionId,
+            Data: message,
+          })
           .promise();
       } catch (e) {
         debugError('error %s', e.message);
@@ -41,7 +56,8 @@ export const handler = async (event: any) => {
   });
 
   try {
-    await Promise.all(sendMessages);
+    const res = await Promise.all(sendMessages);
+    debugVerbose('res', res);
   } catch (e) {
     return httpResponse(500, {
       service: logTag,

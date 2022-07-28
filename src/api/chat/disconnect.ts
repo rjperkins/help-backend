@@ -5,8 +5,8 @@ import { httpResponse } from '../../lib/utils/httpResponse';
 const logTag = 'disconnect-handler';
 const debugVerbose = debug(`ws-api:verbose:${logTag}`);
 
-export const handler = async (event: any) => {
-  debugVerbose('event %j', event);
+export const main = async (event: any) => {
+  debugVerbose('event', event);
   try {
     const output = await ConnectionService.deleteConnection(
       event.requestContext.connectionId

@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "test": "AWS_PROFILE=help-app-154562047227 && sst test",
-    "prestart": "AWS_PROFILE=help-app-154562047227 && sst build --stage debug",
-    "start": "export STAGE=debug && export AWS_PROFILE=help-app-154562047227 && sst start --stage debug",
+    "prestart": "export STAGE=debug && AWS_PROFILE=help-app-154562047227 && sst build --stage $STAGE",
+    "start": "export STAGE=debug && export AWS_PROFILE=help-app-154562047227 && sst start --stage $STAGE",
     "console": "open console.serverless-stack.com",
     "build": "set -u && : '$BATCHNUM' && AWS_PROFILE=help-app-154562047227 && sst build --stage $STAGE",
     "deploy:dev": "AWS_PROFILE=help-app-154562047227 STAGE=development && sst deploy --stage development",

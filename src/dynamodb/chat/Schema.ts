@@ -19,7 +19,7 @@ const schema = new dynamoose.Schema(
       required: true,
     },
     messages: {
-      type: [Object],
+      type: String,
     },
   },
   {
@@ -31,9 +31,7 @@ export class Chat extends Document {
   id: string;
   userId1: string;
   userId2: string;
-  messages: {
-    text: string;
-  }[];
+  messages: string;
 }
 
 export const ChatModel = dynamoose.model<Chat>(

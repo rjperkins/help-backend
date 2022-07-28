@@ -7,6 +7,10 @@ export default class DDBStack extends sst.Stack {
   requestTableArn: string;
   userTableName: string;
   userTableArn: string;
+  connectionsTableName: string;
+  connectionsTableArn: string;
+  chatTableName: string;
+  chatTableArn: string;
 
   constructor(scope: sst.App, id: string, props: DDBStackProps) {
     super(scope, id, props);
@@ -27,10 +31,10 @@ export default class DDBStack extends sst.Stack {
       },
       primaryIndex: { partitionKey: 'requestId' },
       globalIndexes: {
-        gs1: {
+        'acceptedUserId-index': {
           partitionKey: 'acceptedUserId',
         },
-        gs2: {
+        'userId-index': {
           partitionKey: 'userId',
         },
       },
@@ -54,7 +58,7 @@ export default class DDBStack extends sst.Stack {
       },
       primaryIndex: { partitionKey: 'userId' },
       globalIndexes: {
-        gs1: {
+        'email-index': {
           partitionKey: 'email',
         },
       },
@@ -63,12 +67,43 @@ export default class DDBStack extends sst.Stack {
     this.userTableName = userTable.tableName;
     this.userTableArn = userTable.tableArn;
 
+    const connectionsTable = new sst.Table(this, `connections-table`, {
+      fields: {
+        connectionId: 'string',
+        chatId: 'string',
+      },
+      primaryIndex: { partitionKey: 'connectionId' },
+      globalIndexes: {
+        'chatId-index': {
+          partitionKey: 'chatId',
+        },
+      },
+    });
+
+    this.connectionsTableName = connectionsTable.tableName;
+    this.connectionsTableArn = connectionsTable.tableArn;
+
+    const chatTable = new sst.Table(this, `chat-table`, {
+      fields: {
+        id: 'string',
+        userId1: 'string',
+        userId2: 'string',
+        messages: 'binary',
+      },
+      primaryIndex: { partitionKey: 'id' },
+    });
+
+    this.chatTableName = chatTable.tableName;
+    this.chatTableArn = chatTable.tableArn;
+
     // Outputs
     this.addOutputs({
       UserTableArn: userTable.tableArn,
       UserTableName: userTable.tableName,
       RequestTableArn: requestTable.tableArn,
       RequestTableName: requestTable.tableName,
+      ConnectionsTableArn: connectionsTable.tableArn,
+      ConnectionsTableName: connectionsTable.tableName,
     });
   }
 }

@@ -1,6 +1,12 @@
 import AWS from 'aws-sdk';
+import debug from 'debug';
 
-export const handler = async (event: any) => {
+const logTag = 'default-handler';
+const debugVerbose = debug(`ws-api:verbose:${logTag}`);
+
+export const main = async (event: any) => {
+  debugVerbose('event', event);
+
   let connectionInfo;
   let connectionId = event.requestContext.connectionId;
 

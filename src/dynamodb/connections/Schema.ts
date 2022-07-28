@@ -9,6 +9,13 @@ const schema = new dynamoose.Schema(
       type: String,
       hashKey: true,
     },
+    chatId: {
+      type: String,
+      index: {
+        global: true,
+        name: 'chatId-index',
+      },
+    },
   },
   {
     timestamps: true,
@@ -16,6 +23,7 @@ const schema = new dynamoose.Schema(
 );
 
 export class Connection extends Document {
+  chatId: string;
   connectionId: string;
 }
 

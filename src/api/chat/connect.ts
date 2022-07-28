@@ -6,32 +6,43 @@ import { QueryResponse } from 'dynamoose/dist/DocumentRetriever';
 
 const logTag = 'connect-handler';
 const debugVerbose = debug(`ws-api:verbose:${logTag}`);
+const debugError = debug(`ws-api:error:${logTag}`);
 
-export const handler = async (event: any) => {
-  debugVerbose('event %j', event);
+export const main = async (event: any) => {
+  // debugVerbose('event', event);
 
-  let chat: Chat;
+  let chat: Chat = { messages: [] } as unknown as Chat;
+
+  const userId1 = event.headers.userId1;
+  const userId2 = event.headers.userId2;
+
+  if (!userId1 || !userId2) {
+    return httpResponse(400, {
+      service: logTag,
+      error: 'userId1 and userId2 are required as headers',
+    });
+  }
 
   try {
-    const body = JSON.parse(event.body);
+    const chatId = base64Ids(userId1, userId2);
 
-    const { userId1, userId2 } = body;
-
-    const connectionId = base64Ids(userId1, userId2);
-
-    await ConnectionService.createConnection({ connectionId });
-
-    const entry: QueryResponse<Chat> = await ChatService.getChat({
-      chatId: connectionId,
+    await ConnectionService.createConnection({
+      connectionId: event.requestContext.connectionId,
+      chatId,
     });
 
-    if (!entry) {
-      chat = await ChatService.createChat({ userId1, userId2 });
+    const entry: QueryResponse<Chat> = await ChatService.getChat(chatId);
+    debugVerbose('entry', entry[0]);
+
+    if (!entry[0]) {
+      chat = await ChatService.createChat({ chatId, userId1, userId2 });
     } else {
       chat = entry[0];
     }
-    debugVerbose('chat %j', chat);
+
+    debugVerbose('chat', chat);
   } catch (e) {
+    debugError('error %s', e.message);
     return httpResponse(500, {
       service: logTag,
       error: e.message,
