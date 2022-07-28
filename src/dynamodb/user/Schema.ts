@@ -13,6 +13,10 @@ const schema = new dynamoose.Schema(
     email: {
       type: String,
       required: true,
+      index: {
+        global: true,
+        name: 'email-index',
+      },
     },
     firstName: {
       type: String,
