@@ -13,11 +13,20 @@ const schema = new dynamoose.Schema(
     userId1: {
       type: String,
       required: true,
+      index: {
+        global: true,
+        name: 'userId1-index',
+      },
     },
     userId2: {
       type: String,
       required: true,
+      index: {
+        global: true,
+        name: 'userId2-index',
+      },
     },
+    name: { type: String },
     messages: {
       type: String,
     },
@@ -31,6 +40,7 @@ export class Chat extends Document {
   id: string;
   userId1: string;
   userId2: string;
+  name: string;
   messages: string;
 }
 

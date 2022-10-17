@@ -21,20 +21,23 @@ export const main = async (event: any): Promise<HttpResponse> => {
   const body = JSON.parse(event.body);
 
   // The person who sent the message must always be userId1
-  const { message, userId1, userId2 } = body;
+  const { message, senderId, receiverId } = body;
 
-  const chatId = base64Ids(userId1, userId2);
+  const chatId = base64Ids(senderId, receiverId);
 
   let connections;
   let chat: Chat = { messages: [] } as any;
   try {
     connections = await ConnectionService.getConnections();
-    const entry: QueryResponse<Chat> = await ChatService.getChat(chatId);
+    const entry: QueryResponse<Chat> = await ChatService.getChat(
+      senderId,
+      receiverId
+    );
 
     chat = entry[0];
 
     if (!chat) {
-      throw new Error('Chat not found and could not be created');
+      throw new Error('Chat not found.');
     }
 
     const connection = connections.find((connection) => {
@@ -47,34 +50,27 @@ export const main = async (event: any): Promise<HttpResponse> => {
     await callbackAPI
       .postToConnection({
         ConnectionId: event.requestContext.connectionId,
-        Data: message,
+        Data: JSON.stringify(message),
       })
       .promise();
     if (connection) {
       await callbackAPI
         .postToConnection({
           ConnectionId: connection.connectionId,
-          Data: message,
+          Data: JSON.stringify(message),
         })
         .promise();
     }
 
+    const newMessage = {
+      text: message.text,
+      userId: message.user._id,
+      timestamp: new Date().toISOString(),
+    };
+
     const updatedMessages = chat?.messages
-      ? [
-          ...JSON.parse(chat?.messages),
-          {
-            text: message,
-            userId: userId1,
-            timestamp: new Date().toISOString(),
-          },
-        ]
-      : [
-          {
-            text: message,
-            userId: userId1,
-            timestamp: new Date().toISOString(),
-          },
-        ];
+      ? [...JSON.parse(chat?.messages), newMessage]
+      : [newMessage];
 
     await ChatService.updateChatById(chat.id, {
       messages: JSON.stringify(updatedMessages),
@@ -85,10 +81,10 @@ export const main = async (event: any): Promise<HttpResponse> => {
       body: updatedMessages,
     });
   } catch (e) {
-    debugError('error %s', e.message);
-    return httpResponse(500, {
+    debugError('error %s', e);
+    return httpResponse(e.statusCode, {
       service: logTag,
-      error: e.message,
+      error: e,
     });
   }
 };

@@ -88,9 +88,18 @@ export default class DDBStack extends sst.Stack {
         id: 'string',
         userId1: 'string',
         userId2: 'string',
+        name: 'string',
         messages: 'binary',
       },
       primaryIndex: { partitionKey: 'id' },
+      globalIndexes: {
+        'userId1-index': {
+          partitionKey: 'userId1',
+        },
+        'userId2-index': {
+          partitionKey: 'userId2',
+        },
+      },
     });
 
     this.chatTableName = chatTable.tableName;

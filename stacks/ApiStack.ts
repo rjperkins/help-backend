@@ -57,6 +57,9 @@ export default class ApiStack extends sst.Stack {
         'POST /requests': 'src/api/requests/createRequest.handler',
         'DELETE /requests/{id}': 'src/api/requests/deleteRequest.handler',
         'PUT /requests/{id}': 'src/api/requests/updateRequest.handler',
+        // Chat endpoints.
+        'GET /chats/{id}': 'src/api/chat/getChatsByUserId.handler',
+        'GET /chat/{id1}/{id2}/{name}': 'src/api/chat/getChat.handler',
       },
     });
 
